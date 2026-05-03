@@ -49,8 +49,8 @@ AI-powered accounting assistant for the German market. Upload receipts and invoi
 ### 1. Clone and configure
 
 ```bash
-git clone https://github.com/your-username/ai-accounting.git
-cd ai-accounting
+git clone https://github.com/alparn/workless.git
+cd workless
 cp .env.example .env
 ```
 
