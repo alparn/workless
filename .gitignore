@@ -1,0 +1,58 @@
+# Environment — catch .env, ".env copy", .env.local, .env.production, etc.
+.env
+.env.*
+!.env.example
+.env copy
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+*.egg
+dist/
+build/
+
+# Node
+node_modules/
+.next/
+.turbo/
+package-lock.json
+
+# Root-level accidental npm artifacts
+/package.json
+/package-lock.json
+
+# Uploads & exports (keep dirs, ignore content)
+uploads/*
+!uploads/.gitkeep
+exports/*
+!exports/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker
+pgdata/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage
+htmlcov/
+.coverage
+coverage.xml
+
+# Internal docs — not for public repo
+SCOPE-prototype.md
+doc/financial-api-audit-*.md
