@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import Image from "next/image";
 import { Toaster } from "@/components/toaster";
 
 const geistSans = Geist({
@@ -33,8 +34,8 @@ export default function RootLayout({
         <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="mx-auto flex h-14 max-w-6xl items-center px-6 lg:px-8">
             <a href="/clients" className="flex items-center gap-2 text-[15px] font-bold tracking-tight">
-              <span className="text-primary">Work</span>
-              <span>less</span>
+              <Image src="/workless-logo.png" alt="Workless" width={28} height={28} className="rounded" />
+              <span>Workless</span>
             </a>
           </div>
         </header>

@@ -1,6 +1,12 @@
-# AI Accounting
+<p align="center">
+  <img src="docs/workless-logo.png" alt="Workless Logo" width="120" />
+</p>
 
-AI-powered accounting assistant for the German market. Upload receipts and invoices, receive automatic booking suggestions, review and approve them, and generate DATEV-compliant EXTF exports — all through a modern web interface with a built-in conversational AI chat.
+<h1 align="center">Workless</h1>
+
+<p align="center">
+  AI-powered accounting assistant for the German market. Upload receipts and invoices, receive automatic booking suggestions, review and approve them, and generate DATEV-compliant EXTF exports — all through a modern web interface with a built-in conversational AI chat.
+</p>
 
 ## Screenshots
 
