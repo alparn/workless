@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { UploadCloudIcon, FileIcon, XIcon, CheckCircle2Icon, AlertCircleIcon, Loader2Icon } from "lucide-react";
 
 import { api, ApiError } from "@/lib/api-client";
@@ -25,6 +26,7 @@ export function DocumentUpload({
   clientId: string;
   onUploadComplete?: () => void;
 }) {
+  const t = useTranslations("components");
   const [files, setFiles] = useState<FileEntry[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,17 +35,17 @@ export function DocumentUpload({
     const newEntries: FileEntry[] = [];
     for (const file of Array.from(incoming)) {
       if (!ACCEPTED_TYPES.includes(file.type)) {
-        newEntries.push({ file, status: "error", error: "Nicht unterstütztes Format" });
+        newEntries.push({ file, status: "error", error: t("unsupportedFormat") });
         continue;
       }
       if (file.size > MAX_SIZE) {
-        newEntries.push({ file, status: "error", error: "Datei zu groß (max. 10 MB)" });
+        newEntries.push({ file, status: "error", error: t("fileTooLarge") });
         continue;
       }
       newEntries.push({ file, status: "pending" });
     }
     setFiles((prev) => [...prev, ...newEntries]);
-  }, []);
+  }, [t]);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
@@ -87,7 +89,7 @@ export function DocumentUpload({
         );
       } catch (err) {
         const message =
-          err instanceof ApiError ? err.detail : "Upload fehlgeschlagen";
+          err instanceof ApiError ? err.detail : t("uploadFailed");
         setFiles((prev) =>
           prev.map((f, i) =>
             i === idx ? { ...f, status: "error", error: message } : f,
@@ -128,10 +130,10 @@ export function DocumentUpload({
         <UploadCloudIcon className="size-10 text-muted-foreground" />
         <div className="text-center">
           <p className="font-medium">
-            Dateien hierher ziehen oder <span className="text-primary underline underline-offset-4">durchsuchen</span>
+            {t("dragFilesOr")} <span className="text-primary underline underline-offset-4">{t("browse")}</span>
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
-            PDF, PNG, JPG — max. 10 MB pro Datei
+            {t("uploadHint")}
           </p>
         </div>
         <input
@@ -185,23 +187,23 @@ export function DocumentUpload({
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
             {pendingCount > 0
-              ? `${pendingCount} Datei${pendingCount > 1 ? "en" : ""} bereit`
-              : `${doneCount} hochgeladen`}
+              ? t("filesReady", { count: pendingCount })
+              : t("filesUploaded", { count: doneCount })}
           </p>
           <div className="flex gap-2">
             <Button
               variant="outline"
               onClick={() => setFiles([])}
             >
-              Alle entfernen
+              {t("removeAll")}
             </Button>
             <Button
               onClick={uploadAll}
               disabled={pendingCount === 0}
             >
               {pendingCount > 0
-                ? `${pendingCount} Datei${pendingCount > 1 ? "en" : ""} hochladen`
-                : "Fertig"}
+                ? t("uploadFiles", { count: pendingCount })
+                : t("done")}
             </Button>
           </div>
         </div>

@@ -18,6 +18,22 @@ export interface Client {
   updated_at: string;
 }
 
+export const INDUSTRY_KEYS = [
+  "gastro",
+  "it_services",
+  "handel",
+  "handwerk",
+  "beratung",
+  "gesundheit",
+  "immobilien",
+  "freiberufler",
+  "logistik",
+  "produktion",
+  "landwirtschaft",
+  "sonstige",
+] as const;
+
+/** @deprecated Use INDUSTRY_KEYS with useTranslations("industries") instead */
 export const INDUSTRY_OPTIONS = [
   { key: "gastro", label: "Gastronomie & Hotellerie" },
   { key: "it_services", label: "IT & Software" },

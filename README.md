@@ -30,6 +30,18 @@
 - **Financial Dashboard** — Visual overview of revenue, expenses, open items, and key accounting metrics per client.
 - **Skills System** — Domain-specific rules (SKR03 accounts, posting keys, tax codes) stored as Markdown and used by the AI for accurate bookings.
 - **Clarification Workflow** — When the AI is unsure, it creates clarification requests for human review instead of guessing.
+- **Internationalization (i18n)** — Full bilingual UI (German / English) with language switcher. Tax rules are customizable per jurisdiction via Markdown skill files.
+
+## International Tax Localization
+
+Workless is designed for the German market by default, but its Markdown-based skills system makes it adaptable to any country. To customize tax rules, charts of accounts, and deduction logic for your jurisdiction (e.g., USA, UK), see the **[Tax Localization Guide](doc/tax-localization-guide.md)**.
+
+The guide covers:
+- How the skills system works and how skill files flow into the LLM prompt
+- Step-by-step instructions for creating custom chart-of-accounts, tax code, and deduction rule files
+- Complete examples for the **USA** (IRS rules, Sales Tax, Section 179) and **UK** (VAT, Making Tax Digital)
+- Client configuration for international use
+- Future roadmap (country skill packs, multi-currency, alternative export formats)
 
 ## Tech Stack
 

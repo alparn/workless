@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { SaveIcon, XIcon } from "lucide-react";
 
 import type { BookingWithDocument, BookingUpdate } from "@/lib/types";
@@ -22,6 +23,7 @@ interface BookingEditFormProps {
 }
 
 export function BookingEditForm({ booking, onSave, onCancel }: BookingEditFormProps) {
+  const t = useTranslations("components");
   const [account, setAccount] = useState(booking.account);
   const [contraAccount, setContraAccount] = useState(booking.contra_account);
   const [buKey, setBuKey] = useState(booking.bu_key ?? "");
@@ -51,22 +53,22 @@ export function BookingEditForm({ booking, onSave, onCancel }: BookingEditFormPr
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor={`account-${booking.id}`}>Konto</Label>
+          <Label htmlFor={`account-${booking.id}`}>{t("account")}</Label>
           <Input
             id={`account-${booking.id}`}
             value={account}
             onChange={(e) => setAccount(e.target.value)}
-            placeholder="z.B. 6815"
+            placeholder={t("accountPlaceholder")}
             required
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor={`contra-${booking.id}`}>Gegenkonto</Label>
+          <Label htmlFor={`contra-${booking.id}`}>{t("contraAccount")}</Label>
           <Input
             id={`contra-${booking.id}`}
             value={contraAccount}
             onChange={(e) => setContraAccount(e.target.value)}
-            placeholder="z.B. 1200"
+            placeholder={t("contraAccountPlaceholder")}
             required
           />
         </div>
@@ -74,7 +76,7 @@ export function BookingEditForm({ booking, onSave, onCancel }: BookingEditFormPr
 
       <div className="grid grid-cols-3 gap-4">
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor={`amount-${booking.id}`}>Betrag</Label>
+          <Label htmlFor={`amount-${booking.id}`}>{t("amount")}</Label>
           <Input
             id={`amount-${booking.id}`}
             type="number"
@@ -86,47 +88,47 @@ export function BookingEditForm({ booking, onSave, onCancel }: BookingEditFormPr
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label>S/H</Label>
+          <Label>{t("debitCredit")}</Label>
           <Select value={debitCredit} onValueChange={(v) => v && setDebitCredit(v)}>
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="S">S (Soll)</SelectItem>
-              <SelectItem value="H">H (Haben)</SelectItem>
+              <SelectItem value="S">{t("debit")}</SelectItem>
+              <SelectItem value="H">{t("credit")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor={`bukey-${booking.id}`}>BU-Schlüssel</Label>
+          <Label htmlFor={`bukey-${booking.id}`}>{t("buKey")}</Label>
           <Input
             id={`bukey-${booking.id}`}
             value={buKey}
             onChange={(e) => setBuKey(e.target.value)}
-            placeholder="z.B. 9"
+            placeholder={t("buKeyPlaceholder")}
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor={`text-${booking.id}`}>Buchungstext</Label>
+        <Label htmlFor={`text-${booking.id}`}>{t("bookingText")}</Label>
         <Input
           id={`text-${booking.id}`}
           value={bookingText}
           onChange={(e) => setBookingText(e.target.value)}
           maxLength={60}
-          placeholder="max. 60 Zeichen"
+          placeholder={t("bookingTextPlaceholder")}
         />
       </div>
 
       <div className="flex justify-end gap-2">
         <Button type="button" variant="outline" size="sm" onClick={onCancel} disabled={saving}>
           <XIcon className="size-3.5" />
-          Abbrechen
+          {t("cancel")}
         </Button>
         <Button type="submit" size="sm" disabled={saving}>
           <SaveIcon className="size-3.5" />
-          {saving ? "Wird gespeichert…" : "Speichern"}
+          {saving ? t("saving") : t("save")}
         </Button>
       </div>
     </form>

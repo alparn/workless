@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { FileDownIcon, Loader2Icon, AlertCircleIcon } from "lucide-react";
 
 import { api, ApiError } from "@/lib/api-client";
@@ -25,10 +27,10 @@ interface DatevExportDialogProps {
   onExportCreated: (batch: ExportBatch) => void;
 }
 
-function formatCurrency(value: string): string {
+function formatCurrency(value: string, localeString: string): string {
   const num = parseFloat(value);
   if (Number.isNaN(num)) return value;
-  return new Intl.NumberFormat("de-DE", {
+  return new Intl.NumberFormat(localeString, {
     style: "currency",
     currency: "EUR",
   }).format(num);
@@ -50,6 +52,10 @@ export function DatevExportDialog({
   clientId,
   onExportCreated,
 }: DatevExportDialogProps) {
+  const t = useTranslations("components");
+  const locale = useLocale();
+  const localeString = locale === "de" ? "de-DE" : "en-US";
+
   const defaults = getDefaultDateRange();
   const [dateFrom, setDateFrom] = useState(defaults.from);
   const [dateTo, setDateTo] = useState(defaults.to);
@@ -71,7 +77,7 @@ export function DatevExportDialog({
       });
       setPreview(data);
     } catch (err) {
-      setError(err instanceof ApiError ? err.detail : "Vorschau fehlgeschlagen");
+      setError(err instanceof ApiError ? err.detail : t("previewFailed"));
     } finally {
       setPreviewLoading(false);
     }
@@ -97,7 +103,7 @@ export function DatevExportDialog({
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      setError(err instanceof ApiError ? err.detail : "Export fehlgeschlagen");
+      setError(err instanceof ApiError ? err.detail : t("exportFailed"));
     } finally {
       setExportLoading(false);
     }
@@ -106,17 +112,15 @@ export function DatevExportDialog({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>DATEV-Export erstellen</CardTitle>
+        <CardTitle>{t("createExport")}</CardTitle>
         <CardDescription>
-          Nur <strong>freigegebene</strong> Buchungen werden exportiert (einschließlich nach
-          Freigabe per Chat korrigierter). Filter: <strong>Belegdatum</strong>, nicht
-          Upload-Datum.
+          {t("exportDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="date-from">Von</Label>
+            <Label htmlFor="date-from">{t("dateFrom")}</Label>
             <Input
               id="date-from"
               type="date"
@@ -128,7 +132,7 @@ export function DatevExportDialog({
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="date-to">Bis</Label>
+            <Label htmlFor="date-to">{t("dateTo")}</Label>
             <Input
               id="date-to"
               type="date"
@@ -140,10 +144,10 @@ export function DatevExportDialog({
             />
           </div>
           <div className="col-span-2 flex flex-col gap-1.5">
-            <Label htmlFor="export-label">Bezeichnung (optional)</Label>
+            <Label htmlFor="export-label">{t("exportLabel")}</Label>
             <Input
               id="export-label"
-              placeholder="z.B. Buchungsstapel April 2026"
+              placeholder={t("exportLabelPlaceholder")}
               value={label}
               onChange={(e) => setLabel(e.target.value)}
             />
@@ -161,46 +165,46 @@ export function DatevExportDialog({
           <div className="mt-4 space-y-3 rounded-lg border bg-muted/30 p-4">
             <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-3">
               <div>
-                <p className="text-muted-foreground">Im Export (freigegeben)</p>
+                <p className="text-muted-foreground">{t("inExport")}</p>
                 <p className="text-lg font-semibold tabular-nums">
                   {preview.booking_count}
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">Gesamtbetrag Export</p>
+                <p className="text-muted-foreground">{t("totalExportAmount")}</p>
                 <p className="text-lg font-semibold tabular-nums">
-                  {formatCurrency(preview.total_amount)}
+                  {formatCurrency(preview.total_amount, localeString)}
                 </p>
               </div>
               <div>
-                <p className="text-muted-foreground">Zeitraum (Belegdatum)</p>
+                <p className="text-muted-foreground">{t("periodDocDate")}</p>
                 <p className="text-lg font-semibold tabular-nums">
-                  {new Date(preview.date_from).toLocaleDateString("de-DE")} –{" "}
-                  {new Date(preview.date_to).toLocaleDateString("de-DE")}
+                  {new Date(preview.date_from).toLocaleDateString(localeString)} –{" "}
+                  {new Date(preview.date_to).toLocaleDateString(localeString)}
                 </p>
               </div>
             </div>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 border-t border-border/60 pt-3 text-sm sm:grid-cols-4">
               <div>
-                <dt className="text-muted-foreground">Belege mit Buchungen</dt>
+                <dt className="text-muted-foreground">{t("docsWithBookings")}</dt>
                 <dd className="font-medium tabular-nums">
                   {preview.documents_with_bookings_count}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted-foreground">Warten auf Freigabe</dt>
+                <dt className="text-muted-foreground">{t("awaitingApproval")}</dt>
                 <dd className="font-medium tabular-nums">
                   {preview.pending_approval_count}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted-foreground">Bereits exportiert</dt>
+                <dt className="text-muted-foreground">{t("alreadyExported")}</dt>
                 <dd className="font-medium tabular-nums">
                   {preview.exported_count}
                 </dd>
               </div>
               <div>
-                <dt className="text-muted-foreground">Abgelehnt</dt>
+                <dt className="text-muted-foreground">{t("rejected")}</dt>
                 <dd className="font-medium tabular-nums">
                   {preview.rejected_count}
                 </dd>
@@ -208,18 +212,14 @@ export function DatevExportDialog({
             </dl>
             {preview.pending_approval_count > 0 && (
               <p className="text-sm text-muted-foreground">
-                Es gibt {preview.pending_approval_count} Buchung
-                {preview.pending_approval_count === 1 ? "" : "en"} mit Status
-                „Vorschlag“ im Zeitraum. Diese fließen erst in den DATEV-Export ein,
-                nachdem Sie sie unter Buchungen freigegeben haben.
+                {t("pendingBookingsHint", { count: preview.pending_approval_count })}
               </p>
             )}
             {preview.documents_with_bookings_count > 0 &&
               preview.pending_approval_count === 0 &&
               preview.booking_count < preview.documents_with_bookings_count && (
                 <p className="text-sm text-muted-foreground">
-                  Weniger freigegebene Buchungen als Belege mit Buchungen: prüfen Sie
-                  abgelehnte oder bereits exportierte Vorgänge in der Übersicht oben.
+                  {t("fewerBookingsHint")}
                 </p>
               )}
           </div>
@@ -232,7 +232,7 @@ export function DatevExportDialog({
           disabled={previewLoading || !dateFrom || !dateTo}
         >
           {previewLoading && <Loader2Icon className="size-3.5 animate-spin" />}
-          Vorschau
+          {t("preview")}
         </Button>
         <Button
           onClick={handleExport}
@@ -243,7 +243,7 @@ export function DatevExportDialog({
           ) : (
             <FileDownIcon className="size-3.5" />
           )}
-          {exportLoading ? "Wird exportiert…" : "Export generieren"}
+          {exportLoading ? t("exporting") : t("generateExport")}
         </Button>
       </CardFooter>
     </Card>
