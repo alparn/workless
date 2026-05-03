@@ -1,9 +1,5 @@
 # Tax Localization Guide — Adapting Workless for International Tax Systems
 
-> **Deutsche Zusammenfassung:** Workless verwendet Markdown-basierte „Skill-Dateien" in `backend/app/skills/`, um dem KI-Buchhalter länderspezifische Regeln beizubringen (Kontenrahmen, Steuerschlüssel, Absetzbarkeitsregeln). Um Workless für ein anderes Land anzupassen, erstellen Sie neue Skill-Dateien mit den jeweiligen Kontenrahmen, Steuersätzen und Vorschriften, und konfigurieren Sie den Mandanten entsprechend. Diese Anleitung erklärt das System und zeigt detaillierte Beispiele für die USA und Großbritannien.
-
----
-
 ## 1. Overview
 
 Workless is an AI-powered accounting assistant that generates booking (journal entry) suggestions from uploaded invoices, receipts, and bank statements. The AI does not hard-code any accounting rules. Instead, it relies on **Markdown skill files** that describe:
